@@ -1,0 +1,1603 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Klaudia Gruber — Fotografia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --olive: #6B705C;
+    --sand: #DDBEA9;
+    --cream: #F8F4EF;
+    --brown: #7F5539;
+    --olive-dark: #4a4f3e;
+    --brown-dark: #5c3d27;
+    --text: #2c2c2c;
+    --text-light: #5a5a5a;
+    --overlay: rgba(248,244,239,0.96);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ── LOADER ── */
+  #loader {
+    position: fixed; inset: 0; z-index: 9999;
+    background: var(--cream);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 18px;
+    transition: opacity 0.7s ease, visibility 0.7s ease;
+  }
+  #loader.hide { opacity: 0; visibility: hidden; }
+  .loader-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem; font-weight: 300; letter-spacing: 0.18em;
+    color: var(--brown); opacity: 0;
+    animation: fadeUp 0.9s 0.3s forwards;
+  }
+  .loader-line {
+    width: 0; height: 1px; background: var(--sand);
+    animation: expandLine 1s 0.6s forwards;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes expandLine {
+    to { width: 120px; }
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 20px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: transparent;
+    transition: background 0.4s, box-shadow 0.4s, padding 0.4s;
+  }
+  nav.scrolled {
+    background: rgba(248,244,239,0.97);
+    box-shadow: 0 1px 24px rgba(127,85,57,0.08);
+    padding: 14px 48px;
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.45rem; font-weight: 400; letter-spacing: 0.12em;
+    color: var(--brown); text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.3s;
+  }
+  .nav-logo:hover { color: var(--olive); }
+  .nav-links { display: flex; gap: 36px; align-items: center; }
+  .nav-links a {
+    font-size: 0.78rem; font-weight: 400; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--olive-dark);
+    text-decoration: none; transition: color 0.3s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -3px; left: 0; right: 0;
+    height: 1px; background: var(--sand);
+    transform: scaleX(0); transition: transform 0.3s;
+    transform-origin: left;
+  }
+  .nav-links a:hover { color: var(--brown); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+  .lang-switcher { display: flex; gap: 8px; }
+  .lang-btn {
+    font-size: 0.72rem; letter-spacing: 0.1em; font-weight: 400;
+    background: none; border: none; cursor: pointer;
+    color: var(--olive); text-transform: uppercase;
+    padding: 3px 6px;
+    transition: color 0.3s, background 0.3s;
+    border-radius: 2px;
+  }
+  .lang-btn.active { background: var(--sand); color: var(--brown); }
+  .lang-btn:hover { color: var(--brown); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh; position: relative;
+    display: flex; align-items: flex-end;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, #e8e1d8 0%, #ddd3c6 40%, #d0c4b5 100%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 2px; opacity: 0.55;
+  }
+  .hero-grid-img {
+    background: var(--sand); overflow: hidden;
+    position: relative;
+  }
+  .hero-grid-img:nth-child(1) { grid-row: span 2; }
+  .hero-grid-img:nth-child(3) { grid-row: span 2; }
+
+  /* placeholder gradient tiles for hero */
+  .hero-grid-img::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(160deg, var(--sand) 0%, #c8a98e 100%);
+    opacity: 0.6;
+  }
+  .hero-grid-img:nth-child(2)::before { background: linear-gradient(160deg, #b5a090 0%, #9e8470 100%); }
+  .hero-grid-img:nth-child(4)::before { background: linear-gradient(160deg, #c2ad9a 0%, #a8917c 100%); }
+  .hero-grid-img:nth-child(5)::before { background: linear-gradient(160deg, var(--olive) 0%, #4a4f3e 100%); opacity: 0.3; }
+
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(248,244,239,0.85) 0%, rgba(248,244,239,0.1) 60%);
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    padding: 0 48px 80px;
+    max-width: 700px;
+  }
+  .hero-tag {
+    display: inline-block;
+    font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--olive); margin-bottom: 20px;
+    opacity: 0; animation: fadeUp 0.8s 1.2s forwards;
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    font-weight: 300; line-height: 0.95;
+    color: var(--brown-dark); letter-spacing: -0.01em;
+    opacity: 0; animation: fadeUp 0.9s 1.4s forwards;
+  }
+  .hero-title em { font-style: italic; color: var(--olive); }
+  .hero-sub {
+    margin-top: 24px;
+    font-size: 1.05rem; font-weight: 200; letter-spacing: 0.04em;
+    color: var(--text-light); line-height: 1.7; max-width: 420px;
+    opacity: 0; animation: fadeUp 0.8s 1.7s forwards;
+  }
+  .hero-cta {
+    margin-top: 36px;
+    display: inline-block;
+    font-size: 0.76rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--cream); background: var(--brown);
+    padding: 14px 36px; text-decoration: none;
+    transition: background 0.3s, transform 0.3s;
+    opacity: 0; animation: fadeUp 0.8s 1.9s forwards;
+  }
+  .hero-cta:hover { background: var(--olive-dark); transform: translateY(-2px); }
+
+  /* ── SECTIONS ── */
+  section { padding: 100px 48px; }
+  .section-label {
+    font-size: 0.72rem; letter-spacing: 0.24em; text-transform: uppercase;
+    color: var(--sand); margin-bottom: 14px; display: block;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 4vw, 3.4rem);
+    font-weight: 300; color: var(--brown-dark);
+    line-height: 1.15; margin-bottom: 32px;
+  }
+  .section-title em { font-style: italic; }
+  .divider {
+    width: 60px; height: 1px; background: var(--sand);
+    margin-bottom: 48px;
+  }
+
+  /* ── ABOUT ── */
+  #about {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: center;
+    max-width: 1200px; margin: 0 auto;
+    padding: 100px 48px;
+  }
+  .about-img-wrap {
+    position: relative;
+  }
+  .about-img-placeholder {
+    width: 100%; aspect-ratio: 3/4;
+    background: linear-gradient(160deg, var(--sand) 0%, #c4a188 100%);
+    position: relative; overflow: hidden;
+  }
+  .about-img-placeholder::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(200deg, transparent 40%, rgba(107,112,92,0.25));
+  }
+  .about-img-deco {
+    position: absolute; bottom: -20px; right: -20px;
+    width: 70%; height: 70%;
+    border: 1px solid var(--sand); z-index: -1;
+  }
+  .about-img-tag {
+    position: absolute; bottom: 20px; left: -20px;
+    background: var(--cream); padding: 14px 20px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem; font-style: italic; color: var(--brown);
+    box-shadow: 0 4px 20px rgba(127,85,57,0.12);
+  }
+  .about-text p {
+    font-size: 1rem; font-weight: 300; line-height: 1.85;
+    color: var(--text-light); margin-bottom: 18px;
+  }
+  .about-stats {
+    display: flex; gap: 40px; margin-top: 40px;
+  }
+  .stat-item {}
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.8rem; font-weight: 300; color: var(--brown);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--olive); margin-top: 4px;
+  }
+
+  /* ── PORTFOLIO ── */
+  #portfolio { background: var(--cream); max-width: 1400px; margin: 0 auto; }
+  .portfolio-header {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin-bottom: 48px; flex-wrap: wrap; gap: 20px;
+  }
+  .portfolio-filters { display: flex; gap: 16px; flex-wrap: wrap; }
+  .filter-btn {
+    font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase;
+    background: none; border: 1px solid var(--sand);
+    color: var(--olive-dark); padding: 8px 20px; cursor: pointer;
+    transition: all 0.3s;
+  }
+  .filter-btn.active,
+  .filter-btn:hover { background: var(--brown); border-color: var(--brown); color: var(--cream); }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 28px;
+  }
+  .post-card {
+    background: white; overflow: hidden;
+    box-shadow: 0 2px 20px rgba(127,85,57,0.07);
+    transition: transform 0.4s, box-shadow 0.4s;
+    cursor: pointer;
+  }
+  .post-card:hover { transform: translateY(-6px); box-shadow: 0 12px 40px rgba(127,85,57,0.14); }
+  .post-card-cover {
+    width: 100%; aspect-ratio: 4/3;
+    overflow: hidden; position: relative;
+  }
+  .post-card-cover img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+  .post-card:hover .post-card-cover img { transform: scale(1.05); }
+  .post-card-cover-placeholder {
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, var(--sand) 0%, #c4a488 100%);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .post-card-cover-placeholder span {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem; color: rgba(255,255,255,0.5);
+  }
+  .post-card-info { padding: 22px 24px 24px; }
+  .post-card-cat {
+    font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--sand); margin-bottom: 8px; display: block;
+  }
+  .post-card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem; font-weight: 400; color: var(--brown-dark);
+    margin-bottom: 8px; line-height: 1.25;
+  }
+  .post-card-desc {
+    font-size: 0.88rem; font-weight: 300; color: var(--text-light);
+    line-height: 1.6; margin-bottom: 14px;
+  }
+  .post-card-meta {
+    font-size: 0.72rem; color: var(--olive); letter-spacing: 0.06em;
+  }
+  .post-count-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--cream); color: var(--olive);
+    font-size: 0.72rem; padding: 4px 10px; border: 1px solid var(--sand);
+    margin-left: 10px;
+  }
+
+  /* ── POST LIGHTBOX ── */
+  .post-lightbox {
+    display: none; position: fixed; inset: 0; z-index: 500;
+    background: rgba(44,44,44,0.92);
+    align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .post-lightbox.open { display: flex; }
+  .post-lightbox-inner {
+    background: var(--cream); max-width: 900px; width: 100%;
+    max-height: 90vh; overflow-y: auto;
+    position: relative;
+  }
+  .post-lightbox-gallery {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 3px;
+  }
+  .post-lightbox-gallery img,
+  .post-lightbox-gallery .img-placeholder {
+    width: 100%; aspect-ratio: 1;
+    object-fit: cover;
+    background: linear-gradient(135deg, var(--sand), #c4a488);
+  }
+  .post-lightbox-gallery img:first-child,
+  .post-lightbox-gallery .img-placeholder:first-child {
+    grid-column: span 2; aspect-ratio: 16/9;
+  }
+  .post-lightbox-body { padding: 36px 40px 40px; }
+  .post-lightbox-cat {
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--sand); margin-bottom: 10px;
+  }
+  .post-lightbox-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem; font-weight: 300; color: var(--brown-dark);
+    margin-bottom: 18px;
+  }
+  .post-lightbox-desc {
+    font-size: 0.95rem; font-weight: 300; color: var(--text-light);
+    line-height: 1.8; white-space: pre-wrap;
+  }
+  .post-lightbox-close {
+    position: absolute; top: 16px; right: 16px;
+    background: var(--cream); border: none; cursor: pointer;
+    width: 38px; height: 38px; font-size: 1.3rem;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--brown); transition: background 0.3s;
+    z-index: 10;
+  }
+  .post-lightbox-close:hover { background: var(--sand); }
+
+  /* single image lightbox */
+  #img-lightbox {
+    display: none; position: fixed; inset: 0; z-index: 600;
+    background: rgba(0,0,0,0.94);
+    align-items: center; justify-content: center;
+  }
+  #img-lightbox.open { display: flex; }
+  #img-lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; }
+  #img-lightbox-close {
+    position: absolute; top: 20px; right: 24px;
+    background: none; border: none; color: white;
+    font-size: 2rem; cursor: pointer;
+  }
+
+  /* ── SERVICES ── */
+  #services { background: var(--olive-dark); padding: 100px 48px; }
+  #services .section-label { color: var(--sand); opacity: 0.8; }
+  #services .section-title { color: var(--cream); }
+  #services .divider { background: var(--sand); opacity: 0.4; }
+  .services-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 2px; max-width: 1200px; margin: 0 auto;
+  }
+  .service-card {
+    background: rgba(248,244,239,0.06);
+    padding: 40px 32px;
+    border: 1px solid rgba(221,190,169,0.15);
+    transition: background 0.3s;
+  }
+  .service-card:hover { background: rgba(248,244,239,0.11); }
+  .service-icon { font-size: 2rem; margin-bottom: 20px; opacity: 0.85; }
+  .service-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem; font-weight: 300; color: var(--sand);
+    margin-bottom: 12px;
+  }
+  .service-desc {
+    font-size: 0.88rem; font-weight: 300; color: rgba(248,244,239,0.65);
+    line-height: 1.7;
+  }
+
+  /* ── CONTACT ── */
+  #contact { max-width: 900px; margin: 0 auto; padding: 100px 48px; }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
+  .contact-info p {
+    font-size: 0.95rem; font-weight: 300; color: var(--text-light);
+    line-height: 1.8; margin-bottom: 30px;
+  }
+  .contact-detail {
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .contact-item { display: flex; gap: 14px; align-items: flex-start; }
+  .contact-item-icon {
+    width: 32px; height: 32px; background: var(--sand);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem; flex-shrink: 0; margin-top: 2px;
+  }
+  .contact-item-text {}
+  .contact-item-label {
+    font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--olive); margin-bottom: 3px;
+  }
+  .contact-item-value {
+    font-size: 0.92rem; color: var(--text); font-weight: 300;
+  }
+  .contact-item-value a { color: var(--brown); text-decoration: none; }
+  .contact-item-value a:hover { text-decoration: underline; }
+
+  .contact-form { display: flex; flex-direction: column; gap: 16px; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group label {
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--olive);
+  }
+  .form-group input,
+  .form-group textarea {
+    background: white; border: 1px solid #e0d8d0;
+    padding: 12px 16px; font-family: 'Jost', sans-serif;
+    font-size: 0.92rem; font-weight: 300; color: var(--text);
+    outline: none; transition: border-color 0.3s;
+    resize: none;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus { border-color: var(--sand); }
+  .form-btn {
+    background: var(--brown); color: var(--cream);
+    border: none; padding: 14px 32px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.76rem; letter-spacing: 0.18em; text-transform: uppercase;
+    cursor: pointer; transition: background 0.3s;
+    margin-top: 6px;
+  }
+  .form-btn:hover { background: var(--olive-dark); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #2a2520; color: rgba(248,244,239,0.55);
+    padding: 50px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 20px;
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; font-weight: 300; letter-spacing: 0.1em;
+    color: var(--sand);
+  }
+  .footer-copy { font-size: 0.78rem; font-weight: 300; }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a {
+    font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(248,244,239,0.45); text-decoration: none;
+    transition: color 0.3s;
+  }
+  .footer-links a:hover { color: var(--sand); }
+
+  /* ── ADMIN PANEL ── */
+  #admin-overlay {
+    display: none; position: fixed; inset: 0; z-index: 800;
+    background: rgba(42,37,32,0.95);
+    overflow-y: auto;
+  }
+  #admin-overlay.open { display: block; }
+  .admin-inner {
+    max-width: 960px; margin: 0 auto;
+    padding: 60px 48px;
+  }
+  .admin-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 48px;
+  }
+  .admin-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem; font-weight: 300; color: var(--sand);
+    letter-spacing: 0.08em;
+  }
+  .admin-close {
+    background: none; border: 1px solid rgba(221,190,169,0.3);
+    color: var(--sand); padding: 10px 24px;
+    font-family: 'Jost', sans-serif; font-size: 0.76rem;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.3s;
+  }
+  .admin-close:hover { background: var(--sand); color: #2a2520; }
+
+  .admin-tabs { display: flex; gap: 3px; margin-bottom: 40px; }
+  .admin-tab {
+    background: rgba(248,244,239,0.06); border: none;
+    color: rgba(248,244,239,0.5); padding: 12px 24px;
+    font-family: 'Jost', sans-serif; font-size: 0.76rem;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.3s;
+  }
+  .admin-tab.active { background: var(--brown); color: var(--cream); }
+  .admin-tab:hover:not(.active) { background: rgba(248,244,239,0.1); color: var(--sand); }
+
+  .admin-pane { display: none; }
+  .admin-pane.active { display: block; }
+
+  /* admin form styles */
+  .af-group { margin-bottom: 20px; }
+  .af-label {
+    display: block; font-size: 0.72rem; letter-spacing: 0.14em;
+    text-transform: uppercase; color: rgba(221,190,169,0.8);
+    margin-bottom: 8px;
+  }
+  .af-input, .af-textarea, .af-select {
+    width: 100%; background: rgba(248,244,239,0.07);
+    border: 1px solid rgba(221,190,169,0.2);
+    padding: 11px 14px; font-family: 'Jost', sans-serif;
+    font-size: 0.92rem; font-weight: 300; color: var(--cream);
+    outline: none; transition: border-color 0.3s;
+    resize: vertical;
+  }
+  .af-input:focus, .af-textarea:focus, .af-select:focus {
+    border-color: var(--sand);
+  }
+  .af-select option { background: #2a2520; color: var(--cream); }
+  .af-btn {
+    background: var(--brown); color: var(--cream); border: none;
+    padding: 12px 28px; font-family: 'Jost', sans-serif;
+    font-size: 0.76rem; letter-spacing: 0.14em; text-transform: uppercase;
+    cursor: pointer; transition: background 0.3s; margin-right: 10px;
+  }
+  .af-btn:hover { background: var(--olive); }
+  .af-btn.danger { background: #8b3a3a; }
+  .af-btn.danger:hover { background: #a04040; }
+  .af-btn.secondary {
+    background: rgba(248,244,239,0.1); color: var(--sand);
+    border: 1px solid rgba(221,190,169,0.3);
+  }
+  .af-btn.secondary:hover { background: rgba(248,244,239,0.15); }
+
+  .posts-admin-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 36px; }
+  .post-admin-item {
+    background: rgba(248,244,239,0.06); padding: 18px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    border: 1px solid rgba(221,190,169,0.12);
+    gap: 16px; flex-wrap: wrap;
+  }
+  .post-admin-item-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; color: var(--sand); flex: 1;
+  }
+  .post-admin-item-cat {
+    font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(221,190,169,0.5);
+  }
+  .post-admin-actions { display: flex; gap: 8px; }
+
+  .upload-zone {
+    border: 1px dashed rgba(221,190,169,0.35);
+    padding: 36px; text-align: center;
+    color: rgba(248,244,239,0.4); cursor: pointer;
+    transition: border-color 0.3s, background 0.3s;
+    font-size: 0.88rem;
+    position: relative;
+  }
+  .upload-zone:hover { border-color: var(--sand); background: rgba(221,190,169,0.04); }
+  .upload-zone input[type=file] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer;
+  }
+  .upload-thumbs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .upload-thumb {
+    width: 80px; height: 80px; object-fit: cover;
+    border: 1px solid rgba(221,190,169,0.2);
+  }
+  .upload-thumb-wrap {
+    position: relative;
+  }
+  .upload-thumb-remove {
+    position: absolute; top: -6px; right: -6px;
+    width: 18px; height: 18px; background: #8b3a3a;
+    border: none; color: white; font-size: 0.65rem;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+  }
+
+  .admin-msg {
+    padding: 12px 18px; margin-bottom: 20px;
+    font-size: 0.88rem; display: none;
+  }
+  .admin-msg.success { background: rgba(107,112,92,0.25); color: #a8d4a0; border-left: 3px solid #6a9960; }
+  .admin-msg.error   { background: rgba(139,58,58,0.25);  color: #e8a0a0; border-left: 3px solid #a05050; }
+
+  /* ── LOGIN MODAL ── */
+  #login-modal {
+    display: none; position: fixed; inset: 0; z-index: 900;
+    background: rgba(42,37,32,0.97);
+    align-items: center; justify-content: center;
+  }
+  #login-modal.open { display: flex; }
+  .login-box {
+    background: var(--cream); padding: 56px 48px;
+    width: 100%; max-width: 420px;
+    text-align: center;
+  }
+  .login-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem; font-weight: 300; color: var(--brown-dark);
+    margin-bottom: 8px;
+  }
+  .login-sub {
+    font-size: 0.8rem; color: var(--olive); letter-spacing: 0.08em;
+    margin-bottom: 36px;
+  }
+  .login-group { margin-bottom: 16px; text-align: left; }
+  .login-group label {
+    display: block; font-size: 0.7rem; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--olive); margin-bottom: 6px;
+  }
+  .login-group input {
+    width: 100%; border: 1px solid #e0d8d0; padding: 12px 14px;
+    font-family: 'Jost', sans-serif; font-size: 0.95rem;
+    font-weight: 300; color: var(--text); background: white; outline: none;
+    transition: border-color 0.3s;
+  }
+  .login-group input:focus { border-color: var(--sand); }
+  .login-err {
+    color: #b05050; font-size: 0.82rem; margin-bottom: 14px;
+    display: none;
+  }
+  .login-btn {
+    width: 100%; background: var(--brown); color: var(--cream); border: none;
+    padding: 14px; font-family: 'Jost', sans-serif;
+    font-size: 0.78rem; letter-spacing: 0.16em; text-transform: uppercase;
+    cursor: pointer; transition: background 0.3s; margin-top: 6px;
+  }
+  .login-btn:hover { background: var(--olive-dark); }
+  .login-cancel {
+    background: none; border: none; color: var(--olive);
+    font-size: 0.78rem; cursor: pointer; margin-top: 16px;
+    text-decoration: underline;
+  }
+
+  /* ── TOAST ── */
+  #toast {
+    position: fixed; bottom: 32px; right: 32px; z-index: 999;
+    background: var(--brown); color: var(--cream);
+    padding: 14px 24px; font-size: 0.85rem; letter-spacing: 0.04em;
+    opacity: 0; transform: translateY(12px);
+    transition: all 0.4s;
+    pointer-events: none;
+  }
+  #toast.show { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    nav.scrolled { padding: 12px 24px; }
+    .nav-links { display: none; }
+    section, #about, #contact { padding: 70px 24px; }
+    #about { grid-template-columns: 1fr; gap: 40px; }
+    .hero-content { padding: 0 24px 60px; }
+    .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+    .services-grid { grid-template-columns: 1fr 1fr; }
+    footer { padding: 36px 24px; flex-direction: column; text-align: center; }
+    .admin-inner { padding: 36px 20px; }
+  }
+  @media (max-width: 600px) {
+    .posts-grid { grid-template-columns: 1fr; }
+    .services-grid { grid-template-columns: 1fr; }
+    .hero-title { font-size: 3rem; }
+    .post-lightbox-gallery { grid-template-columns: 1fr; }
+    .post-lightbox-gallery img:first-child,
+    .post-lightbox-gallery .img-placeholder:first-child { grid-column: span 1; }
+  }
+
+  /* editable highlight */
+  [contenteditable]:hover { outline: 1px dashed rgba(221,190,169,0.5); }
+  [contenteditable]:focus { outline: 1px solid var(--sand); background: rgba(221,190,169,0.06); }
+
+  .empty-state {
+    text-align: center; padding: 80px 20px;
+    color: var(--text-light);
+  }
+  .empty-state p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem; font-weight: 300; color: var(--olive);
+    margin-bottom: 10px;
+  }
+  .empty-state span { font-size: 0.85rem; }
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-name">Klaudia Gruber</div>
+  <div class="loader-line"></div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a class="nav-logo" id="nav-logo">Klaudia Gruber</a>
+  <div class="nav-links">
+    <a href="#about" data-i18n="nav_about">O mnie</a>
+    <a href="#portfolio" data-i18n="nav_portfolio">Portfolio</a>
+    <a href="#services" data-i18n="nav_services">Oferta</a>
+    <a href="#contact" data-i18n="nav_contact">Kontakt</a>
+  </div>
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('pl')">PL</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('de')">DE</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid">
+    <div class="hero-grid-img"></div>
+    <div class="hero-grid-img"></div>
+    <div class="hero-grid-img"></div>
+    <div class="hero-grid-img"></div>
+    <div class="hero-grid-img"></div>
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <span class="hero-tag" data-i18n="hero_tag">Fotografia artystyczna</span>
+    <h1 class="hero-title" id="hero-title">Klaudia<br><em>Gruber</em></h1>
+    <p class="hero-sub" data-i18n="hero_sub">Każde zdjęcie to opowieść — chwila zatrzymana, emocja zachowana na zawsze.</p>
+    <a href="#portfolio" class="hero-cta" data-i18n="hero_cta">Zobacz portfolio</a>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-img-wrap">
+    <div class="about-img-placeholder"></div>
+    <div class="about-img-deco"></div>
+    <div class="about-img-tag" data-i18n="about_since">Fotografuję od 2015 r.</div>
+  </div>
+  <div class="about-text">
+    <span class="section-label" data-i18n="about_label">O mnie</span>
+    <h2 class="section-title" data-i18n="about_title">Pasja <em>zatrzymana</em><br>w kadrze</h2>
+    <div class="divider"></div>
+    <p data-i18n="about_p1">Jestem fotografką z Krakowa specjalizującą się w portretach, sesjach ślubnych i fotografii krajobrazowej. Wierzę, że najlepsze zdjęcia rodzą się z autentyczności — dlatego każdą sesję traktuję jak spotkanie z kimś wyjątkowym.</p>
+    <p data-i18n="about_p2">Moja praca to połączenie technicznej precyzji z artystyczną wrażliwością. Światło, kompozycja i emocja — to trzy filary mojego stylu fotograficznego.</p>
+    <div class="about-stats">
+      <div class="stat-item">
+        <div class="stat-num" id="stat-years">9+</div>
+        <div class="stat-label" data-i18n="stat_years">lat doświadczenia</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" id="stat-sessions">500+</div>
+        <div class="stat-label" data-i18n="stat_sessions">sesji zdjęciowych</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" id="stat-happy">∞</div>
+        <div class="stat-label" data-i18n="stat_happy">zadowolonych klientów</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio" style="max-width:100%;padding:100px 48px;">
+  <div class="portfolio-header">
+    <div>
+      <span class="section-label" data-i18n="portfolio_label">Moje prace</span>
+      <h2 class="section-title" data-i18n="portfolio_title">Portfolio</h2>
+    </div>
+    <div class="portfolio-filters" id="filters">
+      <button class="filter-btn active" data-cat="all" data-i18n="filter_all">Wszystkie</button>
+    </div>
+  </div>
+  <div class="posts-grid" id="posts-grid"></div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div style="max-width:1200px;margin:0 auto;">
+    <span class="section-label" data-i18n="services_label">Oferta</span>
+    <h2 class="section-title" data-i18n="services_title">Co <em>oferuję</em></h2>
+    <div class="divider"></div>
+    <div class="services-grid" id="services-grid">
+      <div class="service-card">
+        <div class="service-icon">💍</div>
+        <div class="service-name" data-i18n="s1_name">Fotografia ślubna</div>
+        <div class="service-desc" data-i18n="s1_desc">Uchwytuję każdy wyjątkowy moment Waszego dnia — od przygotowań po ostatni taniec.</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🖼️</div>
+        <div class="service-name" data-i18n="s2_name">Sesje portretowe</div>
+        <div class="service-desc" data-i18n="s2_desc">Indywidualne sesje w studio lub w plenerze, które pokazują Twoją osobowość.</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">👨‍👩‍👧</div>
+        <div class="service-name" data-i18n="s3_name">Fotografia rodzinna</div>
+        <div class="service-desc" data-i18n="s3_desc">Naturalne, ciepłe zdjęcia pełne autentycznych emocji i radości.</div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🏔️</div>
+        <div class="service-name" data-i18n="s4_name">Krajobraz & natura</div>
+        <div class="service-desc" data-i18n="s4_desc">Fotografia plenerowa — od górskich panoram po miejskie detale pełne charakteru.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <span class="section-label" data-i18n="contact_label">Napisz do mnie</span>
+  <h2 class="section-title" data-i18n="contact_title">Skontaktuj się<br><em>ze mną</em></h2>
+  <div class="divider"></div>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <p data-i18n="contact_intro">Masz pytania dotyczące sesji lub chcesz omówić szczegóły? Napisz do mnie — odpowiem najszybciej jak mogę.</p>
+      <div class="contact-detail">
+        <div class="contact-item">
+          <div class="contact-item-icon">✉</div>
+          <div class="contact-item-text">
+            <div class="contact-item-label" data-i18n="c_email">Email</div>
+            <div class="contact-item-value"><a id="c-email-val" href="mailto:klaudia@gruber.photo">klaudia@gruber.photo</a></div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">📞</div>
+          <div class="contact-item-text">
+            <div class="contact-item-label" data-i18n="c_phone">Telefon</div>
+            <div class="contact-item-value" id="c-phone-val">+48 123 456 789</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">📍</div>
+          <div class="contact-item-text">
+            <div class="contact-item-label" data-i18n="c_location">Lokalizacja</div>
+            <div class="contact-item-value" id="c-location-val">Kraków, Polska</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">📸</div>
+          <div class="contact-item-text">
+            <div class="contact-item-label">Instagram</div>
+            <div class="contact-item-value"><a id="c-insta-val" href="#">@klaudia.gruber</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <form class="contact-form" onsubmit="handleContactForm(event)">
+      <div class="form-group">
+        <label data-i18n="f_name">Imię i nazwisko</label>
+        <input type="text" required>
+      </div>
+      <div class="form-group">
+        <label data-i18n="f_email">Adres e-mail</label>
+        <input type="email" required>
+      </div>
+      <div class="form-group">
+        <label data-i18n="f_msg">Wiadomość</label>
+        <textarea rows="5" required></textarea>
+      </div>
+      <button type="submit" class="form-btn" data-i18n="f_send">Wyślij wiadomość</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Klaudia Gruber</div>
+  <div class="footer-copy" data-i18n="footer_copy">© 2025 Klaudia Gruber. Wszelkie prawa zastrzeżone.</div>
+  <div class="footer-links">
+    <a href="#about" data-i18n="nav_about">O mnie</a>
+    <a href="#portfolio" data-i18n="nav_portfolio">Portfolio</a>
+    <a href="#contact" data-i18n="nav_contact">Kontakt</a>
+  </div>
+</footer>
+
+<!-- POST LIGHTBOX -->
+<div class="post-lightbox" id="post-lightbox">
+  <div class="post-lightbox-inner">
+    <button class="post-lightbox-close" onclick="closePostLightbox()">×</button>
+    <div class="post-lightbox-gallery" id="post-lightbox-gallery"></div>
+    <div class="post-lightbox-body">
+      <div class="post-lightbox-cat" id="post-lightbox-cat"></div>
+      <div class="post-lightbox-title" id="post-lightbox-title"></div>
+      <div class="post-lightbox-desc" id="post-lightbox-desc"></div>
+    </div>
+  </div>
+</div>
+
+<!-- IMG LIGHTBOX -->
+<div id="img-lightbox">
+  <button id="img-lightbox-close" onclick="document.getElementById('img-lightbox').classList.remove('open')">×</button>
+  <img id="img-lightbox-img" src="" alt="">
+</div>
+
+<!-- LOGIN MODAL -->
+<div id="login-modal">
+  <div class="login-box">
+    <div class="login-title" data-i18n="login_title">Panel administratora</div>
+    <div class="login-sub" data-i18n="login_sub">Wprowadź dane dostępowe</div>
+    <div class="login-group">
+      <label data-i18n="login_user">Nazwa użytkownika</label>
+      <input type="text" id="login-user" autocomplete="username">
+    </div>
+    <div class="login-group">
+      <label data-i18n="login_pass">Hasło</label>
+      <input type="password" id="login-pass" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <div class="login-err" id="login-err" data-i18n="login_err">Nieprawidłowe dane logowania.</div>
+    <button class="login-btn" onclick="doLogin()" data-i18n="login_btn">Zaloguj się</button><br>
+    <button class="login-cancel" onclick="closeLogin()" data-i18n="login_cancel">Anuluj</button>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="admin-overlay">
+  <div class="admin-inner">
+    <div class="admin-header">
+      <div class="admin-title" data-i18n="admin_title">Panel Administratora</div>
+      <button class="admin-close" onclick="closeAdmin()" data-i18n="admin_close">✕ Zamknij</button>
+    </div>
+
+    <div class="admin-tabs">
+      <button class="admin-tab active" onclick="switchTab('posts')" data-i18n="tab_posts">Posty</button>
+      <button class="admin-tab" onclick="switchTab('texts')" data-i18n="tab_texts">Teksty strony</button>
+      <button class="admin-tab" onclick="switchTab('contact')" data-i18n="tab_contact">Dane kontaktowe</button>
+    </div>
+
+    <!-- POSTS TAB -->
+    <div class="admin-pane active" id="tab-posts">
+      <div class="admin-msg" id="posts-msg"></div>
+      <h3 style="color:var(--sand);font-family:'Cormorant Garamond',serif;font-weight:300;font-size:1.3rem;margin-bottom:20px;" data-i18n="posts_existing">Istniejące posty</h3>
+      <div class="posts-admin-list" id="posts-admin-list"></div>
+
+      <h3 style="color:var(--sand);font-family:'Cormorant Garamond',serif;font-weight:300;font-size:1.3rem;margin-bottom:20px;margin-top:40px;" id="posts-form-heading" data-i18n="post_add">Dodaj nowy post</h3>
+      <div id="admin-post-form">
+        <input type="hidden" id="edit-post-id" value="">
+        <div class="af-group">
+          <label class="af-label" data-i18n="pf_title">Tytuł</label>
+          <input type="text" class="af-input" id="pf-title">
+        </div>
+        <div class="af-group">
+          <label class="af-label" data-i18n="pf_cat">Kategoria</label>
+          <input type="text" class="af-input" id="pf-cat" placeholder="np. Portret, Ślub, Krajobraz…">
+        </div>
+        <div class="af-group">
+          <label class="af-label" data-i18n="pf_desc">Opis</label>
+          <textarea class="af-textarea" id="pf-desc" rows="4"></textarea>
+        </div>
+        <div class="af-group">
+          <label class="af-label" data-i18n="pf_imgs">Zdjęcia</label>
+          <div class="upload-zone" id="upload-zone">
+            <span data-i18n="upload_hint">Kliknij lub przeciągnij zdjęcia tutaj</span>
+            <input type="file" id="pf-files" accept="image/*" multiple onchange="handleFileSelect(event)">
+          </div>
+          <div class="upload-thumbs" id="upload-thumbs"></div>
+        </div>
+        <div style="margin-top:10px;">
+          <button class="af-btn" onclick="savePost()" id="post-save-btn" data-i18n="post_save">Zapisz post</button>
+          <button class="af-btn secondary" onclick="resetPostForm()" data-i18n="post_reset">Wyczyść</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TEXTS TAB -->
+    <div class="admin-pane" id="tab-texts">
+      <div class="admin-msg" id="texts-msg"></div>
+      <p style="color:rgba(248,244,239,0.55);font-size:0.85rem;margin-bottom:24px;" data-i18n="texts_hint">Kliknij na pole aby edytować. Zmiany są zapisywane automatycznie.</p>
+      <div id="texts-form"></div>
+    </div>
+
+    <!-- CONTACT TAB -->
+    <div class="admin-pane" id="tab-contact">
+      <div class="admin-msg" id="contact-msg"></div>
+      <div class="af-group">
+        <label class="af-label" data-i18n="c_email">Email</label>
+        <input type="email" class="af-input" id="ac-email">
+      </div>
+      <div class="af-group">
+        <label class="af-label" data-i18n="c_phone">Telefon</label>
+        <input type="text" class="af-input" id="ac-phone">
+      </div>
+      <div class="af-group">
+        <label class="af-label" data-i18n="c_location">Lokalizacja</label>
+        <input type="text" class="af-input" id="ac-location">
+      </div>
+      <div class="af-group">
+        <label class="af-label">Instagram</label>
+        <input type="text" class="af-input" id="ac-insta">
+      </div>
+      <button class="af-btn" onclick="saveContact()" data-i18n="contact_save">Zapisz dane</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ─────────────────────────────────────────
+// DATA STORE (localStorage)
+// ─────────────────────────────────────────
+const DB = {
+  get: k => { try { return JSON.parse(localStorage.getItem('kg_'+k)); } catch { return null; } },
+  set: (k,v) => localStorage.setItem('kg_'+k, JSON.stringify(v)),
+};
+
+// ─────────────────────────────────────────
+// i18n
+// ─────────────────────────────────────────
+const translations = {
+  pl: {
+    nav_about: 'O mnie', nav_portfolio: 'Portfolio', nav_services: 'Oferta', nav_contact: 'Kontakt',
+    hero_tag: 'Fotografia artystyczna',
+    hero_sub: 'Każde zdjęcie to opowieść — chwila zatrzymana, emocja zachowana na zawsze.',
+    hero_cta: 'Zobacz portfolio',
+    about_label: 'O mnie', about_title: 'Pasja zatrzymana\nw kadrze',
+    about_since: 'Fotografuję od 2015 r.',
+    about_p1: 'Jestem fotografką z Krakowa specjalizującą się w portretach, sesjach ślubnych i fotografii krajobrazowej. Wierzę, że najlepsze zdjęcia rodzą się z autentyczności — dlatego każdą sesję traktuję jak spotkanie z kimś wyjątkowym.',
+    about_p2: 'Moja praca to połączenie technicznej precyzji z artystyczną wrażliwością. Światło, kompozycja i emocja — to trzy filary mojego stylu fotograficznego.',
+    stat_years: 'lat doświadczenia', stat_sessions: 'sesji zdjęciowych', stat_happy: 'zadowolonych klientów',
+    portfolio_label: 'Moje prace', portfolio_title: 'Portfolio',
+    filter_all: 'Wszystkie',
+    services_label: 'Oferta', services_title: 'Co oferuję',
+    s1_name: 'Fotografia ślubna', s1_desc: 'Uchwytuję każdy wyjątkowy moment Waszego dnia — od przygotowań po ostatni taniec.',
+    s2_name: 'Sesje portretowe', s2_desc: 'Indywidualne sesje w studio lub w plenerze, które pokazują Twoją osobowość.',
+    s3_name: 'Fotografia rodzinna', s3_desc: 'Naturalne, ciepłe zdjęcia pełne autentycznych emocji i radości.',
+    s4_name: 'Krajobraz & natura', s4_desc: 'Fotografia plenerowa — od górskich panoram po miejskie detale pełne charakteru.',
+    contact_label: 'Napisz do mnie', contact_title: 'Skontaktuj się ze mną',
+    contact_intro: 'Masz pytania dotyczące sesji lub chcesz omówić szczegóły? Napisz do mnie — odpowiem najszybciej jak mogę.',
+    c_email: 'Email', c_phone: 'Telefon', c_location: 'Lokalizacja',
+    f_name: 'Imię i nazwisko', f_email: 'Adres e-mail', f_msg: 'Wiadomość', f_send: 'Wyślij wiadomość',
+    footer_copy: '© 2025 Klaudia Gruber. Wszelkie prawa zastrzeżone.',
+    login_title: 'Panel administratora', login_sub: 'Wprowadź dane dostępowe',
+    login_user: 'Nazwa użytkownika', login_pass: 'Hasło',
+    login_err: 'Nieprawidłowe dane logowania.',
+    login_btn: 'Zaloguj się', login_cancel: 'Anuluj',
+    admin_title: 'Panel Administratora', admin_close: '✕ Zamknij',
+    tab_posts: 'Posty', tab_texts: 'Teksty strony', tab_contact: 'Dane kontaktowe',
+    posts_existing: 'Istniejące posty', post_add: 'Dodaj nowy post',
+    pf_title: 'Tytuł', pf_cat: 'Kategoria', pf_desc: 'Opis', pf_imgs: 'Zdjęcia',
+    upload_hint: 'Kliknij lub przeciągnij zdjęcia tutaj',
+    post_save: 'Zapisz post', post_reset: 'Wyczyść',
+    texts_hint: 'Kliknij na pole aby edytować. Zmiany są zapisywane automatycznie.',
+    contact_save: 'Zapisz dane',
+    toast_saved: 'Zapisano!', toast_deleted: 'Usunięto post.',
+    toast_contact: 'Dane kontaktowe zapisane.',
+    edit_lbl: 'Edytuj', delete_lbl: 'Usuń',
+    post_photos: 'zdjęć',
+    empty_posts: 'Brak postów', empty_posts_sub: 'Dodaj pierwszy post w panelu administratora.',
+    no_img: 'bez zdjęcia',
+    form_success: 'Wiadomość wysłana! Skontaktuję się wkrótce.',
+  },
+  en: {
+    nav_about: 'About', nav_portfolio: 'Portfolio', nav_services: 'Services', nav_contact: 'Contact',
+    hero_tag: 'Artistic Photography',
+    hero_sub: 'Every photo tells a story — a moment frozen, an emotion preserved forever.',
+    hero_cta: 'View portfolio',
+    about_label: 'About me', about_title: 'Passion captured\nin a frame',
+    about_since: 'Photographing since 2015',
+    about_p1: 'I am a photographer from Kraków specializing in portraits, weddings, and landscape photography. I believe the best photos are born from authenticity — that is why I treat every session as a meeting with someone special.',
+    about_p2: 'My work combines technical precision with artistic sensitivity. Light, composition, and emotion — these are the three pillars of my photographic style.',
+    stat_years: 'years of experience', stat_sessions: 'photo sessions', stat_happy: 'happy clients',
+    portfolio_label: 'My work', portfolio_title: 'Portfolio',
+    filter_all: 'All',
+    services_label: 'Services', services_title: 'What I offer',
+    s1_name: 'Wedding Photography', s1_desc: 'I capture every precious moment of your day — from preparations to the last dance.',
+    s2_name: 'Portrait Sessions', s2_desc: 'Individual studio or outdoor sessions that reveal your personality.',
+    s3_name: 'Family Photography', s3_desc: 'Natural, warm photos full of authentic emotions and joy.',
+    s4_name: 'Landscape & Nature', s4_desc: 'Outdoor photography — from mountain panoramas to urban details full of character.',
+    contact_label: 'Get in touch', contact_title: 'Contact me',
+    contact_intro: 'Questions about a session or want to discuss details? Write to me — I will respond as soon as possible.',
+    c_email: 'Email', c_phone: 'Phone', c_location: 'Location',
+    f_name: 'Full name', f_email: 'Email address', f_msg: 'Message', f_send: 'Send message',
+    footer_copy: '© 2025 Klaudia Gruber. All rights reserved.',
+    login_title: 'Admin Panel', login_sub: 'Enter your credentials',
+    login_user: 'Username', login_pass: 'Password',
+    login_err: 'Invalid login credentials.',
+    login_btn: 'Log in', login_cancel: 'Cancel',
+    admin_title: 'Admin Panel', admin_close: '✕ Close',
+    tab_posts: 'Posts', tab_texts: 'Page texts', tab_contact: 'Contact info',
+    posts_existing: 'Existing posts', post_add: 'Add new post',
+    pf_title: 'Title', pf_cat: 'Category', pf_desc: 'Description', pf_imgs: 'Photos',
+    upload_hint: 'Click or drag photos here',
+    post_save: 'Save post', post_reset: 'Clear',
+    texts_hint: 'Click a field to edit. Changes are saved automatically.',
+    contact_save: 'Save details',
+    toast_saved: 'Saved!', toast_deleted: 'Post deleted.',
+    toast_contact: 'Contact details saved.',
+    edit_lbl: 'Edit', delete_lbl: 'Delete',
+    post_photos: 'photos',
+    empty_posts: 'No posts yet', empty_posts_sub: 'Add the first post in the admin panel.',
+    no_img: 'no image',
+    form_success: 'Message sent! I will be in touch soon.',
+  },
+  de: {
+    nav_about: 'Über mich', nav_portfolio: 'Portfolio', nav_services: 'Angebot', nav_contact: 'Kontakt',
+    hero_tag: 'Künstlerische Fotografie',
+    hero_sub: 'Jedes Foto erzählt eine Geschichte — ein eingefrorener Moment, eine für immer bewahrte Emotion.',
+    hero_cta: 'Portfolio ansehen',
+    about_label: 'Über mich', about_title: 'Leidenschaft im\nBild festgehalten',
+    about_since: 'Fotografiere seit 2015',
+    about_p1: 'Ich bin Fotografin aus Krakau, spezialisiert auf Porträts, Hochzeiten und Landschaftsfotografie. Ich glaube, dass die besten Fotos aus Authentizität entstehen — deshalb behandle ich jede Session wie ein Treffen mit etwas Besonderem.',
+    about_p2: 'Meine Arbeit verbindet technische Präzision mit künstlerischer Sensibilität. Licht, Komposition und Emotion — das sind die drei Säulen meines fotografischen Stils.',
+    stat_years: 'Jahre Erfahrung', stat_sessions: 'Foto-Sessions', stat_happy: 'zufriedene Kunden',
+    portfolio_label: 'Meine Arbeiten', portfolio_title: 'Portfolio',
+    filter_all: 'Alle',
+    services_label: 'Angebot', services_title: 'Was ich anbiete',
+    s1_name: 'Hochzeitsfotografie', s1_desc: 'Ich halte jeden besonderen Moment Ihres Tages fest — von den Vorbereitungen bis zum letzten Tanz.',
+    s2_name: 'Porträt-Sessions', s2_desc: 'Individuelle Studio- oder Outdoor-Sessions, die Ihre Persönlichkeit zeigen.',
+    s3_name: 'Familienfotografie', s3_desc: 'Natürliche, warme Fotos voller authentischer Emotionen und Freude.',
+    s4_name: 'Landschaft & Natur', s4_desc: 'Outdoor-Fotografie — von Bergpanoramen bis hin zu stadtdetails voller Charakter.',
+    contact_label: 'Schreiben Sie mir', contact_title: 'Kontaktieren Sie mich',
+    contact_intro: 'Haben Sie Fragen zu einer Session oder möchten Sie Details besprechen? Schreiben Sie mir — ich antworte so schnell wie möglich.',
+    c_email: 'E-Mail', c_phone: 'Telefon', c_location: 'Standort',
+    f_name: 'Vor- und Nachname', f_email: 'E-Mail-Adresse', f_msg: 'Nachricht', f_send: 'Nachricht senden',
+    footer_copy: '© 2025 Klaudia Gruber. Alle Rechte vorbehalten.',
+    login_title: 'Administrationsbereich', login_sub: 'Zugangsdaten eingeben',
+    login_user: 'Benutzername', login_pass: 'Passwort',
+    login_err: 'Ungültige Anmeldedaten.',
+    login_btn: 'Anmelden', login_cancel: 'Abbrechen',
+    admin_title: 'Administrationsbereich', admin_close: '✕ Schließen',
+    tab_posts: 'Beiträge', tab_texts: 'Seitentexte', tab_contact: 'Kontaktdaten',
+    posts_existing: 'Vorhandene Beiträge', post_add: 'Neuen Beitrag hinzufügen',
+    pf_title: 'Titel', pf_cat: 'Kategorie', pf_desc: 'Beschreibung', pf_imgs: 'Fotos',
+    upload_hint: 'Klicken oder Fotos hierher ziehen',
+    post_save: 'Beitrag speichern', post_reset: 'Löschen',
+    texts_hint: 'Klicken Sie auf ein Feld zum Bearbeiten. Änderungen werden automatisch gespeichert.',
+    contact_save: 'Daten speichern',
+    toast_saved: 'Gespeichert!', toast_deleted: 'Beitrag gelöscht.',
+    toast_contact: 'Kontaktdaten gespeichert.',
+    edit_lbl: 'Bearbeiten', delete_lbl: 'Löschen',
+    post_photos: 'Fotos',
+    empty_posts: 'Keine Beiträge', empty_posts_sub: 'Fügen Sie den ersten Beitrag im Adminbereich hinzu.',
+    no_img: 'kein Bild',
+    form_success: 'Nachricht gesendet! Ich melde mich bald.',
+  }
+};
+
+let currentLang = DB.get('lang') || 'pl';
+
+function t(k) { return translations[currentLang][k] || translations['pl'][k] || k; }
+
+function setLang(lang) {
+  currentLang = lang;
+  DB.set('lang', lang);
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.getAttribute('data-i18n');
+    const val = t(k);
+    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = val;
+    else el.textContent = val;
+  });
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent === lang.toUpperCase());
+  });
+  // re-render dynamic parts
+  renderPosts();
+  renderPostsAdminList();
+  populateTextFields();
+}
+
+// ─────────────────────────────────────────
+// LOADER
+// ─────────────────────────────────────────
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hide');
+  }, 1800);
+  setLang(currentLang);
+  loadContactData();
+  renderPosts();
+});
+
+// ─────────────────────────────────────────
+// NAV SCROLL
+// ─────────────────────────────────────────
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// ─────────────────────────────────────────
+// LOGO DOUBLE-CLICK → ADMIN
+// ─────────────────────────────────────────
+let logoClickCount = 0, logoClickTimer;
+document.getElementById('nav-logo').addEventListener('click', () => {
+  logoClickCount++;
+  clearTimeout(logoClickTimer);
+  logoClickTimer = setTimeout(() => {
+    if (logoClickCount >= 2) openLoginOrAdmin();
+    logoClickCount = 0;
+  }, 350);
+});
+
+function openLoginOrAdmin() {
+  if (DB.get('admin_logged')) {
+    openAdmin();
+  } else {
+    document.getElementById('login-modal').classList.add('open');
+    setTimeout(() => document.getElementById('login-user').focus(), 100);
+  }
+}
+
+// ─────────────────────────────────────────
+// LOGIN
+// ─────────────────────────────────────────
+function doLogin() {
+  const u = document.getElementById('login-user').value.trim();
+  const p = document.getElementById('login-pass').value;
+  const err = document.getElementById('login-err');
+  if (u === 'klaukub' && p === 'kochambrata33') {
+    DB.set('admin_logged', true);
+    document.getElementById('login-modal').classList.remove('open');
+    document.getElementById('login-user').value = '';
+    document.getElementById('login-pass').value = '';
+    err.style.display = 'none';
+    openAdmin();
+  } else {
+    err.style.display = 'block';
+    document.getElementById('login-pass').value = '';
+  }
+}
+function closeLogin() {
+  document.getElementById('login-modal').classList.remove('open');
+  document.getElementById('login-user').value = '';
+  document.getElementById('login-pass').value = '';
+  document.getElementById('login-err').style.display = 'none';
+}
+
+// ─────────────────────────────────────────
+// ADMIN PANEL
+// ─────────────────────────────────────────
+function openAdmin() {
+  document.getElementById('admin-overlay').classList.add('open');
+  renderPostsAdminList();
+  populateTextFields();
+  loadContactAdmin();
+}
+function closeAdmin() {
+  document.getElementById('admin-overlay').classList.remove('open');
+  DB.set('admin_logged', false);
+}
+function switchTab(name) {
+  document.querySelectorAll('.admin-tab').forEach((t,i) => {
+    const names = ['posts','texts','contact'];
+    t.classList.toggle('active', names[i] === name);
+  });
+  document.querySelectorAll('.admin-pane').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+}
+
+// ─────────────────────────────────────────
+// POSTS
+// ─────────────────────────────────────────
+function getPosts() { return DB.get('posts') || []; }
+function savePosts(posts) { DB.set('posts', posts); }
+
+let pendingImages = []; // {dataUrl, name}
+
+function handleFileSelect(e) {
+  const files = Array.from(e.target.files);
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      pendingImages.push({ dataUrl: ev.target.result, name: file.name });
+      renderUploadThumbs();
+    };
+    reader.readAsDataURL(file);
+  });
+  e.target.value = '';
+}
+
+function renderUploadThumbs() {
+  const wrap = document.getElementById('upload-thumbs');
+  wrap.innerHTML = pendingImages.map((img,i) => `
+    <div class="upload-thumb-wrap">
+      <img src="${img.dataUrl}" class="upload-thumb" alt="">
+      <button class="upload-thumb-remove" onclick="removeThumb(${i})">×</button>
+    </div>
+  `).join('');
+}
+function removeThumb(i) { pendingImages.splice(i,1); renderUploadThumbs(); }
+
+function savePost() {
+  const id = document.getElementById('edit-post-id').value;
+  const title = document.getElementById('pf-title').value.trim();
+  const cat = document.getElementById('pf-cat').value.trim();
+  const desc = document.getElementById('pf-desc').value.trim();
+
+  if (!title) { showAdminMsg('posts-msg', t('pf_title') + '?', 'error'); return; }
+
+  let posts = getPosts();
+  const now = new Date().toLocaleDateString(currentLang === 'pl' ? 'pl-PL' : currentLang === 'de' ? 'de-DE' : 'en-GB');
+
+  if (id) {
+    // edit existing
+    const idx = posts.findIndex(p => p.id == id);
+    if (idx >= 0) {
+      posts[idx].title = title;
+      posts[idx].cat = cat;
+      posts[idx].desc = desc;
+      if (pendingImages.length) posts[idx].images = pendingImages.map(i => i.dataUrl);
+    }
+  } else {
+    posts.push({
+      id: Date.now(),
+      title, cat, desc,
+      images: pendingImages.map(i => i.dataUrl),
+      date: now
+    });
+  }
+  savePosts(posts);
+  showToast(t('toast_saved'));
+  resetPostForm();
+  renderPostsAdminList();
+  renderPosts();
+}
+
+function resetPostForm() {
+  document.getElementById('edit-post-id').value = '';
+  document.getElementById('pf-title').value = '';
+  document.getElementById('pf-cat').value = '';
+  document.getElementById('pf-desc').value = '';
+  pendingImages = [];
+  renderUploadThumbs();
+  document.getElementById('posts-form-heading').setAttribute('data-i18n','post_add');
+  document.getElementById('posts-form-heading').textContent = t('post_add');
+  document.getElementById('post-save-btn').setAttribute('data-i18n','post_save');
+  document.getElementById('post-save-btn').textContent = t('post_save');
+}
+
+function editPost(id) {
+  const post = getPosts().find(p => p.id == id);
+  if (!post) return;
+  document.getElementById('edit-post-id').value = id;
+  document.getElementById('pf-title').value = post.title;
+  document.getElementById('pf-cat').value = post.cat || '';
+  document.getElementById('pf-desc').value = post.desc || '';
+  pendingImages = (post.images || []).map(d => ({ dataUrl: d, name: 'img' }));
+  renderUploadThumbs();
+  document.getElementById('posts-form-heading').textContent = t('edit_lbl') + ': ' + post.title;
+  document.getElementById('post-save-btn').textContent = t('toast_saved').replace('!','') + ' →';
+  document.getElementById('admin-post-form').scrollIntoView({ behavior: 'smooth' });
+}
+
+function deletePost(id) {
+  let posts = getPosts().filter(p => p.id != id);
+  savePosts(posts);
+  showToast(t('toast_deleted'));
+  renderPostsAdminList();
+  renderPosts();
+}
+
+function renderPostsAdminList() {
+  const posts = getPosts();
+  const el = document.getElementById('posts-admin-list');
+  if (!posts.length) { el.innerHTML = `<p style="color:rgba(248,244,239,0.4);font-size:0.88rem;">${t('empty_posts')}</p>`; return; }
+  el.innerHTML = posts.map(p => `
+    <div class="post-admin-item">
+      <div>
+        <div class="post-admin-item-title">${p.title}</div>
+        <div class="post-admin-item-cat">${p.cat || '—'} · ${(p.images||[]).length} ${t('post_photos')}</div>
+      </div>
+      <div class="post-admin-actions">
+        <button class="af-btn secondary" style="padding:8px 16px;font-size:0.72rem;" onclick="editPost(${p.id})">${t('edit_lbl')}</button>
+        <button class="af-btn danger" style="padding:8px 16px;font-size:0.72rem;" onclick="deletePost(${p.id})">${t('delete_lbl')}</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderPosts() {
+  const posts = getPosts();
+  const grid = document.getElementById('posts-grid');
+  const filtersEl = document.getElementById('filters');
+
+  // categories
+  const cats = [...new Set(posts.map(p => p.cat).filter(Boolean))];
+  const activeCat = filtersEl.querySelector('.filter-btn.active')?.dataset.cat || 'all';
+  filtersEl.innerHTML = `<button class="filter-btn ${activeCat==='all'?'active':''}" data-cat="all" onclick="filterPosts('all')">${t('filter_all')}</button>`;
+  cats.forEach(c => {
+    filtersEl.innerHTML += `<button class="filter-btn ${activeCat===c?'active':''}" data-cat="${c}" onclick="filterPosts('${c}')">${c}</button>`;
+  });
+
+  const filtered = activeCat === 'all' ? posts : posts.filter(p => p.cat === activeCat);
+
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><p>${t('empty_posts')}</p><span>${t('empty_posts_sub')}</span></div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(p => {
+    const coverSrc = p.images && p.images.length ? p.images[0] : null;
+    const coverHtml = coverSrc
+      ? `<img src="${coverSrc}" alt="${p.title}" loading="lazy">`
+      : `<div class="post-card-cover-placeholder"><span>✦</span></div>`;
+    return `
+    <div class="post-card" onclick="openPostLightbox(${p.id})">
+      <div class="post-card-cover">${coverHtml}</div>
+      <div class="post-card-info">
+        <span class="post-card-cat">${p.cat || ''}</span>
+        <div class="post-card-title">${p.title}</div>
+        ${p.desc ? `<div class="post-card-desc">${p.desc.slice(0,90)}${p.desc.length>90?'…':''}</div>` : ''}
+        <div class="post-card-meta">
+          ${p.date || ''}
+          ${p.images&&p.images.length ? `<span class="post-count-badge">📷 ${p.images.length} ${t('post_photos')}</span>` : ''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterPosts(cat) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === cat));
+  renderPosts();
+  // fix active after re-render
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === cat));
+}
+
+// ─────────────────────────────────────────
+// POST LIGHTBOX
+// ─────────────────────────────────────────
+function openPostLightbox(id) {
+  const post = getPosts().find(p => p.id == id);
+  if (!post) return;
+  const lb = document.getElementById('post-lightbox');
+  document.getElementById('post-lightbox-cat').textContent = post.cat || '';
+  document.getElementById('post-lightbox-title').textContent = post.title;
+  document.getElementById('post-lightbox-desc').textContent = post.desc || '';
+
+  const gal = document.getElementById('post-lightbox-gallery');
+  if (post.images && post.images.length) {
+    gal.innerHTML = post.images.map((src,i) =>
+      `<img src="${src}" alt="" style="cursor:zoom-in;" onclick="openImgLightbox('${src}')">`
+    ).join('');
+    gal.style.display = '';
+  } else {
+    gal.innerHTML = '';
+    gal.style.display = 'none';
+  }
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closePostLightbox() {
+  document.getElementById('post-lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function openImgLightbox(src) {
+  document.getElementById('img-lightbox-img').src = src;
+  document.getElementById('img-lightbox').classList.add('open');
+}
+
+document.getElementById('post-lightbox').addEventListener('click', e => {
+  if (e.target === document.getElementById('post-lightbox')) closePostLightbox();
+});
+document.getElementById('img-lightbox').addEventListener('click', e => {
+  if (e.target === document.getElementById('img-lightbox')) document.getElementById('img-lightbox').classList.remove('open');
+});
+
+// ─────────────────────────────────────────
+// TEXTS EDITOR
+// ─────────────────────────────────────────
+const editableTexts = [
+  { key: 'hero_sub',    label: 'Hero – podtytuł' },
+  { key: 'about_since', label: 'O mnie – od kiedy' },
+  { key: 'about_p1',   label: 'O mnie – akapit 1' },
+  { key: 'about_p2',   label: 'O mnie – akapit 2' },
+  { key: 'contact_intro', label: 'Kontakt – intro' },
+];
+
+function populateTextFields() {
+  const form = document.getElementById('texts-form');
+  form.innerHTML = '';
+  editableTexts.forEach(item => {
+    const saved = DB.get('txt_'+item.key);
+    const val = saved !== null ? saved : t(item.key);
+    const div = document.createElement('div');
+    div.className = 'af-group';
+    div.innerHTML = `<label class="af-label">${item.label}</label>
+      <textarea class="af-textarea" rows="3" data-txt-key="${item.key}">${val}</textarea>`;
+    div.querySelector('textarea').addEventListener('input', function() {
+      DB.set('txt_'+item.key, this.value);
+      // update live on page
+      document.querySelectorAll(`[data-i18n="${item.key}"]`).forEach(el => el.textContent = this.value);
+      showAdminMsg('texts-msg', t('toast_saved'), 'success');
+    });
+    form.appendChild(div);
+  });
+}
+
+function loadSavedTexts() {
+  editableTexts.forEach(item => {
+    const saved = DB.get('txt_'+item.key);
+    if (saved !== null) {
+      document.querySelectorAll(`[data-i18n="${item.key}"]`).forEach(el => el.textContent = saved);
+    }
+  });
+}
+window.addEventListener('load', loadSavedTexts);
+
+// ─────────────────────────────────────────
+// CONTACT DATA
+// ─────────────────────────────────────────
+function loadContactData() {
+  const c = DB.get('contact_data');
+  if (!c) return;
+  if (c.email) {
+    document.getElementById('c-email-val').textContent = c.email;
+    document.getElementById('c-email-val').href = 'mailto:' + c.email;
+  }
+  if (c.phone) document.getElementById('c-phone-val').textContent = c.phone;
+  if (c.location) document.getElementById('c-location-val').textContent = c.location;
+  if (c.insta) {
+    document.getElementById('c-insta-val').textContent = c.insta;
+    document.getElementById('c-insta-val').href = 'https://instagram.com/' + c.insta.replace('@','');
+  }
+}
+function loadContactAdmin() {
+  const c = DB.get('contact_data') || {};
+  document.getElementById('ac-email').value = c.email || 'klaudia@gruber.photo';
+  document.getElementById('ac-phone').value = c.phone || '+48 123 456 789';
+  document.getElementById('ac-location').value = c.location || 'Kraków, Polska';
+  document.getElementById('ac-insta').value = c.insta || '@klaudia.gruber';
+}
+function saveContact() {
+  const c = {
+    email: document.getElementById('ac-email').value.trim(),
+    phone: document.getElementById('ac-phone').value.trim(),
+    location: document.getElementById('ac-location').value.trim(),
+    insta: document.getElementById('ac-insta').value.trim(),
+  };
+  DB.set('contact_data', c);
+  loadContactData();
+  showToast(t('toast_contact'));
+  showAdminMsg('contact-msg', t('toast_contact'), 'success');
+}
+
+// ─────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2800);
+}
+function showAdminMsg(id, msg, type) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.className = 'admin-msg ' + type;
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 3000);
+}
+function handleContactForm(e) {
+  e.preventDefault();
+  showToast(t('form_success'));
+  e.target.reset();
+}
+
+// ─────────────────────────────────────────
+// INTERSECTION OBSERVER – fade in sections
+// ─────────────────────────────────────────
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('#about, #portfolio, #services, #contact').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(30px)';
+  el.style.transition = 'opacity 0.9s ease, transform 0.9s ease';
+  observer.observe(el);
+});
+</script>
+</body>
+</html>
